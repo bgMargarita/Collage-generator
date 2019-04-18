@@ -1,39 +1,54 @@
-window.onload = function () {
+function prepareCanvas() {
+    var body = document.getElementsByTagName('body')[0];
+    var x = document.createElement("canvas");
+    x.setAttribute('id', 'viewport');
+    document.body.appendChild(x);
 
-    var cv = document.createElement('canvas');
+}
 
-    cv.setAttribute("id", "cv");
-    var ct = cv.getContext('2d');
-    
-    var body = document.getElementById("mybody");
-    body.appendChild(cv);
-    //ct.save();
+function makeCollage(width, height) {
+    //draw an empty canvas
+    var canvas = document.getElementById('viewport');
+    canvas.width = width;
+    canvas.height = height;
+    context = canvas.getContext('2d');
 
-    var w = cv.width;
-    var h = cv.height;
+    //add first image
+    base_image = new Image();
+    base_image.src = 'https://images.unsplash.com/photo-1478905094053-75043450c873?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=300&h=200&fit=crop&ixid=eyJhcHBfaWQiOjF9';
+    context.drawImage(base_image, 0, 0);
 
-    ct.clearRect(0, 0, w, h);
-    ct.fillStyle = 'rgba(0, 255, 0, 1.0)';
-    ct.fillRect(0, 0, w, h);
+    //add second image
+    base_image2 = new Image();
+    base_image2.src = 'https://images.unsplash.com/photo-1481747435017-5e320257af53?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=300&h=200&fit=crop&ixid=eyJhcHBfaWQiOjF9'
+    context.drawImage(base_image2, 150, 50);
 
-    ct.strokeStyle = 'rgba(127, 127, 255, 1.0)';
-    ct.fillStyle = 'rgba(0, 0, 255, 1.0)';
-    ct.lineWidth = 5;
-    ct.beginPath();
-    ct.arc(w / 2, h / 2, w / 2, h / 2, 0, 2 * Math.PI, 0);
-    ct.closePath();
-    //ct.stroke();
-    ct.fill();
+    //add third image
+    base_image3 = new Image();
+    base_image3.src = 'https://images.unsplash.com/photo-1461092678334-1aa3ab3543ce?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=300&h=200&fit=crop&ixid=eyJhcHBfaWQiOjF9'
+    context.drawImage(base_image3, 20, 150);
+
+}
+
+$(document).ready(function () {
+    prepareCanvas();
+    makeCollage(500, 400);
+
+    getPhrase();
+
+});
+
+function getPhrase() {
+    alert("getphrase");
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        //if (this.readyState == 4 && this.status == 200) {
+        alert(this.responseText);
+        //}
+    };
+    xhttp.open("GET", "https://api.forismatic.com/api/1.0/?method=getQuote", true);
+    //xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
 
 
-    ct.fillStyle = "rgb(200,0,0)";
-    ct.fillRect (10, 10, 55, 50);
-
-    ct.fillStyle = "rgba(0, 0, 200, 0.5)";
-    ct.fillRect (30, 30, 55, 50);
-    pict = new Image();
-    pict.src='https://images.unsplash.com/photo-1554188068-3666131be6ca?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9';
-    ct.drawImage(pict, 33, 71, 104, 124, 21, 20, 150, 180);
-
-
-};
+}
