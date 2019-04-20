@@ -36,6 +36,26 @@ function createDOM(width, height) {
     div.appendChild(div2);
     div.appendChild(div1);
 //text
+    // getText();
+
+    //getText();
+    //getText();
+    //getText();
+    var canvas = document.getElementById('viewport');
+    canvas.width = width;
+    canvas.height = height;
+    context = canvas.getContext('2d');
+    wrapText(context, texts, 20, 50, 500, 30);
+
+    //div.appendItem(texts);
+    div.innerText(texts);
+    var p = $('div');
+    var lines = p.html().split("\n");
+    var formated = [];
+    $.each(lines, function (i, v) {
+        formated.push("<span>{1}</span>".replace('{1}', v));
+    });
+    p.html(formated.join(''));
 }
 
 function makeCollage(width, height) {
@@ -53,26 +73,26 @@ function makeCollage(width, height) {
 
 }
 
-/*
-function wrapText(context, text, marginLeft, marginTop, maxWidth, lineHeight) {
-    var words = text.split(" ");
+
+function wrapText(context, texts, marginLeft, marginTop, maxWidth, lineHeight) {
+    var words;
+    words = texts.split(" ");
     var countWords = words.length;
     var line = "";
     for (var n = 0; n < countWords; n++) {
         var testLine = line + words[n] + " ";
         var testWidth = context.measureText(testLine).width;
         if (testWidth > maxWidth) {
-            context.fillText(line, marginLeft, marginTop);
+            context.fillText(line, marginLeft, marginTop + i * lineHeight);
             line = words[n] + " ";
             marginTop += lineHeight;
         } else {
             line = testLine;
         }
     }
-    context.fillText(line, marginLeft, marginTop);
+    context.fillText(line, marginLeft, marginTop + i * lineHeight);
 }
 
-*/
 
 function createImage(url, y, x, context, index) {
     var base_image = new Image();
@@ -94,6 +114,24 @@ $(document).ready(function () {
 
 
 });
+
+function getText() {
+
+    $.getJSON("https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=jsonp&jsonp=?")
+        .done(update)
+        .fail(handleErr);
+}
+
+function update(response) {
+
+    console.log(JSON.stringify(response.quoteText));
+    texts.push(response.quoteText);
+
+}
+
+function handleErr(jqxhr, textStatus, err) {
+    console.log("Request Failed: " + textStatus + ", " + err);
+}
 
 
 
