@@ -18,7 +18,8 @@ function createDOM(width, height) {
     btn.value = 'Update';
     btn.style = 'z-index:2';
     btn.onclick = function () {
-        makeCollage(width, height);
+        //  makeCollage(width, height);
+        location.reload();
     };
     div1.appendChild(btn);
 
@@ -29,34 +30,37 @@ function createDOM(width, height) {
     div2.style.background = "#d7e1f2";
     div2.style.color = "white";
 
-    var x = document.createElement("canvas");
-    x.setAttribute('id', 'viewport');
+
     // document.body.appendChild(x);
-    div2.appendChild(x);
+    var canvas = document.createElement("canvas");
+    canvas.setAttribute('id', 'viewport');
+    canvas.width = 400;
+    canvas.height = 470;
+
+    div2.appendChild(canvas);
     div.appendChild(div2);
     div.appendChild(div1);
-//text
-    // getText();
-
-    //getText();
-    //getText();
-    //getText();
-    var canvas = document.getElementById('viewport');
-    canvas.width = width;
-    canvas.height = height;
     context = canvas.getContext('2d');
-    wrapText(context, texts, 20, 50, 500, 30);
 
-    //div.appendItem(texts);
-    div.innerText(texts);
-    var p = $('div');
-    var lines = p.html().split("\n");
-    var formated = [];
-    $.each(lines, function (i, v) {
-        formated.push("<span>{1}</span>".replace('{1}', v));
-    });
-    p.html(formated.join(''));
+    wrapText(context, texts[0], 20, 50, 600, 30);
+
+//text
+    getText();
+    getText();
+    getText();
+    getText();
+    drawAfter1Seconds(width, height);
+
 }
+
+function drawAfter1Seconds(width, height) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            makeCollage(width, height);
+        }, 1000);
+    });
+}
+
 
 function makeCollage(width, height) {
     //draw an empty canvas
@@ -66,31 +70,31 @@ function makeCollage(width, height) {
     context = canvas.getContext('2d');
 
     createImage('https://source.unsplash.com/collection/1127163/300x200', 0, 0, context, 0);
-    createImage('https://source.unsplash.com/collection/1127177/300x200', width / 2 + 20, 0, context, 1);
-    createImage('https://source.unsplash.com/collection/1127156/300x200', 0, height / 2, context, 2);
-    createImage('https://source.unsplash.com/collection/1147624/300x200', width / 2 + 20, height / 2, context, 3);
+    createImage('https://source.unsplash.com/collection/1127177/300x200', width / 3 + 20, 0, context, 1);
+    createImage('https://source.unsplash.com/collection/1127156/300x200', 0, height / 2 + 10, context, 2);
+    createImage('https://source.unsplash.com/collection/1147624/300x200', width / 3 + 20, height / 2 + 10, context, 3);
 
 
 }
 
 
-function wrapText(context, texts, marginLeft, marginTop, maxWidth, lineHeight) {
-    var words;
-    words = texts.split(" ");
-    var countWords = words.length;
-    var line = "";
-    for (var n = 0; n < countWords; n++) {
-        var testLine = line + words[n] + " ";
-        var testWidth = context.measureText(testLine).width;
-        if (testWidth > maxWidth) {
-            context.fillText(line, marginLeft, marginTop + i * lineHeight);
-            line = words[n] + " ";
-            marginTop += lineHeight;
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    var words = text.split(' ');
+    var line = '';
+
+    for (var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + ' ';
+        var metrics = context.measureText(testLine);
+        var testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+            context.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += lineHeight;
         } else {
             line = testLine;
         }
     }
-    context.fillText(line, marginLeft, marginTop + i * lineHeight);
+    context.fillText(line, x, y);
 }
 
 
@@ -102,7 +106,7 @@ function createImage(url, y, x, context, index) {
 
         context.font = "16pt Calibri";
         context.fillStyle = "#000";
-        context.fillText(texts[index], x + 20, y + 50);
+//        wrapText(context, texts[index], x+20, y+50, 270, 30);
     };
 
     base_image.src = url;
@@ -110,8 +114,7 @@ function createImage(url, y, x, context, index) {
 }
 
 $(document).ready(function () {
-    createDOM(500, 500);
-
+    createDOM(650, 570);
 
 });
 
