@@ -2,10 +2,10 @@ var coords = [];
 var texts = [];
 
 function createDOM(width, height) {
-    var div = document.createElement('div')
+    var div = document.createElement('div');
     document.body.appendChild(div);
 
-    var div1 = document.createElement('div')
+    var div1 = document.createElement('div');
     div1.id = 'div1';
     div1.style.width = width;
     div1.style.height = "40px";
@@ -40,15 +40,13 @@ function createDOM(width, height) {
     div2.appendChild(canvas);
     div.appendChild(div2);
     div.appendChild(div1);
-    context = canvas.getContext('2d');
-
-    wrapText(context, texts[0], 20, 50, 600, 30);
-
 //text
     getText();
     getText();
     getText();
     getText();
+    // wrapText(context, texts[1], 20, 50, 600, 30);
+
     drawAfter1Seconds(width, height);
 
 }
@@ -70,11 +68,11 @@ function makeCollage(width, height) {
     context = canvas.getContext('2d');
 
     createImage('https://source.unsplash.com/collection/1127163/300x200', 0, 0, context, 0);
-    createImage('https://source.unsplash.com/collection/1127177/300x200', width / 3 + 20, 0, context, 1);
+    createImage('https://source.unsplash.com/collection/1127177/300x200', width / 3 + 40, 0, context, 1);
     createImage('https://source.unsplash.com/collection/1127156/300x200', 0, height / 2 + 10, context, 2);
-    createImage('https://source.unsplash.com/collection/1147624/300x200', width / 3 + 20, height / 2 + 10, context, 3);
+    createImage('https://source.unsplash.com/collection/1147624/300x200', width / 3 + 40, height / 2 + 10, context, 3);
 
-
+    //wrapText(context, texts[1], 0, 0, 570, 30);
 }
 
 
@@ -103,18 +101,20 @@ function createImage(url, y, x, context, index) {
 
     base_image.onload = function () {
         context.drawImage(base_image, x, y);
-
         context.font = "16pt Calibri";
         context.fillStyle = "#000";
-//        wrapText(context, texts[index], x+20, y+50, 270, 30);
+        wrapText(context, texts[index], x + 20, y + 30, 270, 25);
+
+
     };
+
 
     base_image.src = url;
 
 }
 
 $(document).ready(function () {
-    createDOM(650, 570);
+    createDOM(600, 600);
 
 });
 
